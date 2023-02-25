@@ -1,5 +1,5 @@
 const allowOrigins = [
-    'http://localhost:3000'
+    'https://phantomdairy.onrender.com'
 ]
 
 module.exports = allowOrigins
