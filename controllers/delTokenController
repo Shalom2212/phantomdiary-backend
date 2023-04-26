@@ -1,0 +1,21 @@
+const RefreshToken = require('../models/RefreshToken')
+const asyncHandler = require('express-async-handler')
+const jwt = require('jsonwebtoken')
+
+
+const deleteToken = asyncHandler(async(req,res)=>{
+    const refreshToken = req.body.token
+    //return res.json(refreshToken)
+    if(refreshToken == null) return res.sendStatus(401)
+    const refreshTokenDB = await RefreshToken.find({refreshToken}).lean().exec()
+    if(!refreshTokenDB?.length) return res.sendStatus(404)
+
+    const delRefreshToken = (await RefreshToken.deleteMany({'refreshtoken':refreshToken}))
+   
+    if(delRefreshToken) res.sendStatus(204)
+    else
+        res.sendStatus(400)
+
+})
+
+module.exports = deleteToken

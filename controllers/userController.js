@@ -1,4 +1,6 @@
 const User = require('../models/User')
+const RefreshToken = require('../models/RefreshToken')
+const {generateAccessToken,generateRefreshToken} = require('./tokenGenerateController')
 const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcrypt')
 
@@ -32,8 +34,21 @@ const createNewUse = asyncHandler(async(req,res)=>{
     //create user
     const user = await User.create(userObject)
 
+    //send access token and refresh token
+    const accessToken = generateAccessToken(username)
+    const refreshToken = generateRefreshToken(username)
+
+    const RefreshTokenObject = {"refreshtoken":refreshToken}
+    const refreshtkn = await RefreshToken.create(RefreshTokenObject)
+
+    if(!refreshtkn) return res.sendStatus(400)
+
     if(user){
-        res.status(201).json({message:`New user ${username} created`})
+        res.status(201).json({
+            message:`New user ${username} created`,
+            accessToken:accessToken,
+            refreshToken:refreshToken
+    })
     }else{
         res.status(400).json({message:'Invalid user data received'})
     }

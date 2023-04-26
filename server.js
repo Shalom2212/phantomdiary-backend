@@ -33,6 +33,10 @@ app.use('/auth',require('./routes/authRouter'))
 
 app.use('/content',require('./routes/contentRouters'))
 
+app.use('/token',require('./routes/tokenRouter'))
+
+app.use('/deltoken',require('./routes/delTokenRouter'))
+
 
 app.all('*',(req,res)=>{
     res.status(404).send("404 NOT FOUND")

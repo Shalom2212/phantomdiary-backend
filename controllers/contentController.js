@@ -1,5 +1,6 @@
 const Content = require('../models/Content')
 const asyncHandler = require('express-async-handler')
+// const authenticateToken = require('../middleware/authenticateToken')
 
 const getAllContent = asyncHandler(async(req,res)=>{
     // const content = await Content.find().lean()
@@ -14,14 +15,16 @@ const getAllContent = asyncHandler(async(req,res)=>{
     res.json(content)
 })
 
-const createContent = asyncHandler(async(req,res)=>{
-    const{username,content} = req.body
-
-    if(!username || !content ){
+const createContent = asyncHandler( async(req,res)=>{
+    
+    //return res.json(req.usertkn.name)
+    const{title,content} = req.body
+    username = req.usertkn.name
+    if(!title || !content  ){
         return res.status(400).json({message:'All fields are required'})
     }
 
-    const contentObject = {username,content}
+    const contentObject = {username,title,content}
 
     const Contents = await Content.create(contentObject)
 
